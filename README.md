@@ -8,10 +8,10 @@
 </div>
 
 ![Python](https://img.shields.io/badge/python-3.x-blue?style=for-the-badge&logo=python&logoColor=white)
+![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=for-the-badge&logo=apache)
 ![Docker](https://img.shields.io/badge/docker-available-blue?style=for-the-badge&logo=docker&logoColor=white)
 ![Textual](https://img.shields.io/badge/TUI-Textual-green?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Development-yellow?style=for-the-badge)
-![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=for-the-badge&logo=apache)
 
 ## 🎯 Objective
 **InfoBIM CLI** is a Text-based User Interface (TUI) command-line tool designed to orchestrate and manage BIM data in a unified way. Born from the consolidation of various tools and scripts, it serves as an operations hub for **triaging, visualizing, and importing IFC files**.
