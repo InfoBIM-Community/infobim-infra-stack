@@ -1,5 +1,5 @@
-<div style="display: inline-block; vertical-align: middle;">
-  <div style="display: inline-block; vertical-align: middle;">
+<div>
+  <div style="display: inline-block; vertical-align: middle; width: 25%;">
     <img src="https://avatars.githubusercontent.com/u/252078843" width="100" alt="Logo" />
   </div>
   <div style="display: inline-block; vertical-align: middle; margin-left: 10px;">
@@ -124,6 +124,7 @@ The tool is designed to run in containers, ensuring the execution environment is
    ```
    *Default: `develop` if not specified.*
    ```
+
 ## 🤝 Contribution & Feedback
 
 We welcome contributions, ideas, and discussions! Whether you're fixing a bug, improving documentation, or proposing new features, your input is valuable.
