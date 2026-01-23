@@ -1,6 +1,6 @@
 <div>
-  <div style="display: inline-block; vertical-align: middle;" width="25%">
-    <img src="https://avatars.githubusercontent.com/u/252078843" width="100" alt="Logo" />
+  <div style="display: inline-block; vertical-align: middle;" width="100">
+    <img src="https://avatars.githubusercontent.com/u/252078843" width="100" alt="InfoBIM Logo" />
   </div>
   <div style="display: inline-block; vertical-align: middle; margin-left: 10px;">
     <h1 style="margin: 0; border-bottom: none;">InfoBIM CLI - BIM Data Management</h1>
@@ -31,13 +31,13 @@ Its purpose is to abstract the complexity of BIM processing, offering an agile a
 </td>
 <td width="50%">
 <a href="">
-<img src="docs/images/report-preview.png" alt="Technical Report Preview" />
+<img src="docs/images/report-preview.png" alt="IFC File Details" />
 </a>
 </td>
 </tr>
 <tr>
-<td align="center"><b>Main Dashboard</b><br/>The central hub displaying the active environment and version, providing quick access to core features like IFC screening, visualization, and import workflows.</td>
-<td align="center"><b>Technical Analysis</b><br/>Comprehensive breakdown of imported IFC files, detailing geometry, property sets, and entity relationships in a structured format.</td>
+<td align="center"><b>Main Menu</b><br/>The central hub displaying the active environment and version, providing quick access to core features like IFC screening, visualization, and import workflows.</td>
+<td align="center"><b>IFC File Details</b><br/>Comprehensive breakdown of imported IFC files, detailing geometry, property sets, and entity relationships in a structured format.</td>
 </tr>
 </table>
 
@@ -141,5 +141,5 @@ This project is licensed under the **Apache License 2.0**. See the [LICENSE](LIC
 ---
 
 <div align="center">
-  <b>Proudly developed in Brazil 🇧🇷</b>
+  <b>Proudly developed in Brazil, so far 🇧🇷</b>
 </div>
