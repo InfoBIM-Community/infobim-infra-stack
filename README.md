@@ -1,5 +1,5 @@
 <div>
-  <div style="display: inline-block; vertical-align: middle; width: 25%;">
+  <div style="display: inline-block; vertical-align: middle;" width="25%">
     <img src="https://avatars.githubusercontent.com/u/252078843" width="100" alt="Logo" />
   </div>
   <div style="display: inline-block; vertical-align: middle; margin-left: 10px;">
@@ -129,7 +129,7 @@ The tool is designed to run in containers, ensuring the execution environment is
 
 We welcome contributions, ideas, and discussions! Whether you're fixing a bug, improving documentation, or proposing new features, your input is valuable.
 
-- **Found an issue?** Please report it on [GitHub Issues](https://github.com/eliasmpjunior/brasibim/issues).
+- **Found an issue?** Please report it on [GitHub Issues](https://github.com/InfoBIM-Community/infobim-infra-stack/issues).
 - **Join the Community:** Chat with us on [Discord](https://discord.gg/rwwUwttZ).
 - **Have a suggestion?** Join the discussion or submit a Pull Request.
 - **Support the project:** If you find this tool useful, consider starring the repository! ⭐
