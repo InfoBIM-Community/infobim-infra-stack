@@ -3,7 +3,7 @@
     <img src="https://avatars.githubusercontent.com/u/252078843" width="100" alt="InfoBIM Logo" />
   </div>
   <div style="display: inline-block; vertical-align: middle; margin-left: 10px;">
-    <h1 style="margin: 0; border-bottom: none;">InfoBIM CLI - BIM Data Management</h1>
+    <h1 style="margin: 0; border-bottom: none;">InfoBIM — The Technical Response Factory for AECO</h1>
   </div>
 </div>
 
@@ -13,12 +13,37 @@
 ![Textual](https://img.shields.io/badge/TUI-Textual-green?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Development-yellow?style=for-the-badge)
 
-## 🎯 Objective
-**InfoBIM CLI** is a Text-based User Interface (TUI) command-line tool designed to orchestrate and manage BIM data in a unified way. Born from the consolidation of various tools and scripts, it serves as an operations hub for **triaging, visualizing, and importing IFC files**.
+> **"BIM on the inside, drawings on the outside, data for everyone."**
 
-The project uses **OntoBDC** as the underlying framework for persistence, semantic interpretation, and data structuring, but maintains its own identity as the interface for data management and operation.
+**InfoBIM** is an operational hub for **triage, audit, and execution** of BIM data (focusing on IFC + BCF). It is designed to be operated by humans via **TUI** (terminal) and by **AI Agents** via natural language - ensuring **deterministic execution** through auditable scripts.
 
-Its purpose is to abstract the complexity of BIM processing, offering an agile and standardized interface for engineers and information managers, regardless of the specific project they are working on.
+It exists to solve a classic AECO problem: the dependency on heavy proprietary software to answer simple technical questions under pressure (e.g., *"how many m² is the roof?"*, *"what is the material list?"*, *"reply to BCF #17"*).
+
+---
+
+## 🏗️ The Hybrid Concept: TUI + Infra + AI
+
+The project consolidates scattered tools into a coherent architecture that unites three worlds:
+
+### 1. The Human Interface (TUI)
+Built on **Textual** and **Rich**, offering a modern terminal experience. Fast, lightweight, and focused on productivity.
+*   **Triage & Navigation**: Automatic directory scanning and IFC filtering.
+*   **Inspection**: Dynamic technical reports rendered via Jinja2.
+*   **Visual Feedback**: The system rejects raw text. It uses `print_message_box`, semantic colors, and real-time progress indicators.
+
+### 2. Infrastructure as Product
+The **InfoBIM Infrastructure Stack** (this repository) is the meta-framework that ensures the software runs anywhere.
+*   **Radical Standardization**: Docker and a rigid folder structure (`stack/`, `data/`) eliminate "it works on my machine".
+*   **Check & Repair**: The system self-diagnoses (`./infobim check`). If something breaks, it attempts to fix it or instructs the human with surgical precision.
+*   **Prompt as Code (PEaC)**: Instructions for AIs are versioned (`stack/prompts/`), ensuring automated agents follow the same business rules as humans.
+
+### 3. The Artificial Brain (LLM as Planner)
+Here lies the strategic innovation:
+*   **LLM Plans, It Doesn't Execute**: An AI doesn't "guess" the roof area by reading the IFC file text. It understands the user's question and decides which **deterministic script** to call.
+*   **Deterministic Execution**: The actual calculation is performed by auditable Python/OntoBDC code, ensuring engineering precision.
+*   **Multilingual**: The user asks in Portuguese, English, or Spanish; the system translates the intent into standardized technical commands.
+
+---
 
 ## 🎥 Preview
 
@@ -36,80 +61,51 @@ Its purpose is to abstract the complexity of BIM processing, offering an agile a
 </td>
 </tr>
 <tr>
-<td align="center"><b>Main Menu</b><br/>The central hub displaying the active environment and version, providing quick access to core features like IFC screening, visualization, and import workflows.</td>
-<td align="center"><b>IFC File Details</b><br/>Comprehensive breakdown of imported IFC files, detailing geometry, property sets, and entity relationships in a structured format.</td>
+<td align="center"><b>Main Menu</b><br/>The central hub for triage and navigation.</td>
+<td align="center"><b>IFC File Details</b><br/>Structured inspection and reporting.</td>
 </tr>
 </table>
+
+---
+
+## 🧩 Architecture & Data Flow
+
+### Layers
+1.  **Presentation (TUI)**: Manages input/output and screens.
+2.  **Adapters**: The bridge between CLI/TUI and the Core (e.g., `ImporterAdapter`).
+3.  **Domain (OntoBDC)**: The BIM business rules engine and persistence layer.
+4.  **Infrastructure**: Bash scripts (`stack/*.sh`) and Docker orchestrating the environment.
+
+### Event Sourcing (Project Mode)
+Unlike systems that rely on file comparisons (IFC diffs), InfoBIM focuses on **action traceability**.
+*   Every operation (import, fix, export, BCF reply) is a registered event.
+*   The project history is the sum of these events, allowing for objective auditing: *"Who did what, when, and with which parameters?"*
+
+---
+
+## 🚀 Project Status
+
+*   ✅ **Concept & Architecture**: Defined (TUI + Stack + LLM Planner + Event Sourcing).
+*   🧱 **In Progress**: Consolidating infrastructure scripts into the `./infobim` command.
+*   🧪 **In Progress**: Local agent reading versioned prompts from `stack/prompts/`.
+*   🛠️ **Planned**: API Gateway for Client-Server (Provider) mode.
+
+---
 
 ## 📚 Documentation
 
 Detailed documentation is available in the `docs/` directory:
 
-- **[Getting Started](docs/getting_started.md)**: Setup guide, first steps, and configuration.
-- **[Architecture](docs/architecture.md)**: System design, core concepts, and data flow.
-- **[CLI Reference](docs/cli_reference.md)**: Comprehensive guide to commands, flags, and menus.
-- **[Development Guide](docs/development.md)**: Contributing, coding standards, and testing.
-- **[API/Integration](docs/integration.md)**: How to integrate with OntoBDC and other systems.
+- **[Getting Started](docs/getting_started.md)**: Setup guide and first steps.
+- **[Architecture](docs/architecture.md)**: System design and core concepts.
+- **[CLI Reference](docs/cli_reference.md)**: Guide to commands and flags.
+- **[Development Guide](docs/development.md)**: Contributing and coding standards.
 
-## 🚀 Key Features
-
-### 1. Navigation and Triage
-- Automatic scanning of input directories (configurable via adapters).
-- Interactive listing and filtering of IFC files.
-
-### 2. File Inspection
-- Detailed visualization of IFC file metadata and properties.
-- Dynamic rendering of technical reports directly in the terminal (via Jinja2 templates).
-
-### 3. Interactive Import
-- Ingestion pipeline for IFC files, structuring data through `ontobdc`.
-- **Modal Interface**: Real-time visual feedback of processing steps (Reading, Transforming, Persisting) without blocking navigation.
-- Integrated error handling and file validation.
-
-## 🛠️ Tech Stack
-
-- **Language**: Python 3.x
-- **Interface (TUI)**: [Textual](https://textual.textualize.io/) and [Rich](https://rich.readthedocs.io/) for a modern user experience in the terminal.
-- **Containerization**: Docker and Docker Compose for isolation and reproducibility.
-- **Core**: Integration with `ontobdc` modules for specialized AECO/BIM data manipulation.
-
-## 🧩 Architecture and Patterns
-
-- **Adapters Pattern**: Isolation between the user interface (CLI) and business logic/data access (in `src/cli/adapters`).
-- **Asynchrony**: Use of Textual *Worker Threads* for I/O-intensive operations (like IFC parsing), keeping the UI fluid.
-- **Factories**: Creation pattern to instantiate services and storage adapters in a decoupled way.
-
-## 🏗️ Project Structure
-
-The directory structure separates infrastructure configuration (Docker) from application code (Python), facilitating maintenance and portability.
-
-```
-infra/
-├── docker/                 # Containerization Configuration
-│   ├── compose/            # Docker Compose files per environment
-│   │   ├── config.yaml     # General environment settings
-│   │   ├── .env            # Environment variables
-│   │   └── docker-compose-*.yaml
-│   ├── manifests/          # Dockerfiles
-│   ├── cli-requirements.txt # CLI Python dependencies
-│   └── web-requirements.txt # Python dependencies (future Web)
-├── src/                    # Application Source Code
-│   ├── cli/                # Command Line Interface
-│   │   ├── adapters/       # Integration Adapters (e.g., Importer)
-│   │   ├── terminal/       # TUI Logic (Textual/Rich)
-│   │   │   ├── menu/       # Screens and Menus
-│   │   │   ├── config.yaml # CLI Configuration
-│   │   │   └── run.py      # CLI Entry Point
-│   └── lib/                # Shared Libraries and Utilities
-├── branch.sh               # Script for git branch management
-├── commit.sh               # Script for standardized semantic commits
-├── run.sh                  # Main script to start CLI via Docker
-└── up.sh                   # Script to bring up background services
-```
+---
 
 ## ⚙️ How to Run
 
-The tool is designed to run in containers, ensuring the execution environment is identical for all stakeholders (developers, engineers, managers).
+The tool is designed to run in containers, ensuring the execution environment is identical for all stakeholders.
 
 ### Prerequisites
 - Docker Engine
@@ -117,29 +113,32 @@ The tool is designed to run in containers, ensuring the execution environment is
 
 ### Commands
 
-1. **Start CLI (Interactive Mode)**
-   Use the `run.sh` script in the `infra` project root.
-   ```bash
-   ./run.sh [develop|staging|production]
-   ```
-   *Default: `develop` if not specified.*
-   ```
+1.  **Install & Check**
+    ```bash
+    ./infobim install
+    ./infobim check
+    ```
 
-## 🤝 Contribution & Feedback
+2.  **Start CLI (Interactive Mode)**
+    ```bash
+    ./infobim ifc
+    ```
 
-We welcome contributions, ideas, and discussions! Whether you're fixing a bug, improving documentation, or proposing new features, your input is valuable.
+---
 
-- **Found an issue?** Please report it on [GitHub Issues](https://github.com/InfoBIM-Community/infobim-infra-stack/issues).
-- **Join the Community:** Chat with us on [Discord](https://discord.gg/rwwUwttZ).
-- **Have a suggestion?** Join the discussion or submit a Pull Request.
-- **Support the project:** If you find this tool useful, consider starring the repository! ⭐
+## 🤝 Distribution Model
+
+InfoBIM is Open Source at its core but commercially viable via the **Provider** model.
+
+*   **Local (Open Source)**: For technical users. Requires Docker and terminal knowledge. Free and unlimited.
+*   **Provider (API)**: For the general AECO market. Users access the TUI (or future Web) connected to a managed API, eliminating infrastructure friction.
+
+---
 
 ## 📄 License
 
 This project is licensed under the **Apache License 2.0**. See the [LICENSE](LICENSE) file for details.
 
----
-
 <div align="center">
-  <b>Proudly developed in Brazil, so far 🇧🇷</b>
+  <b>Proudly developed in Brazil 🇧🇷, so far</b>
 </div>
