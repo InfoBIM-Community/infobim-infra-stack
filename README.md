@@ -13,8 +13,6 @@
 
 ![Python](https://img.shields.io/badge/python-3.x-blue?style=for-the-badge&logo=python&logoColor=white)
 ![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=for-the-badge&logo=apache)
-![Docker](https://img.shields.io/badge/docker-available-blue?style=for-the-badge&logo=docker&logoColor=white)
-![Textual](https://img.shields.io/badge/TUI-Textual-green?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Development-yellow?style=for-the-badge)
 
 ### The Capability Engine for BIM Automation
@@ -31,12 +29,17 @@ Whether you are a human running commands in the terminal or an **AI Agent** plan
 
 ### 1. Install
 ```bash
-# Clone the repository
-git clone --recursive git@github.com:InfoBIM-Community/infobim-infra-stack.git
-cd infobim-infra-stack
+# 1. Download the CLI
+wget https://raw.githubusercontent.com/InfoBIM-Community/infobim-ifc/master/infobim
 
-# Install dependencies (Docker required)
+# 2. Make it executable
+chmod +x infobim
+
+# 3. Install environment (downloads the stack & setups venv)
 ./infobim install
+
+# Optional: Install with Docker support
+# ./infobim install --docker
 ```
 
 ### 2. Run a Capability
