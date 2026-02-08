@@ -50,12 +50,29 @@ Execute a specific task directly without opening the full UI:
 ./infobim run infobim.capability.list_sewage_pipes --ifc_path ./data/my_project.ifc
 ```
 
+![Report Example](docs/images/report.png)
+
 ### 3. Agent Discovery (New!)
 Are you an LLM or building an Agent? Get the full machine-readable catalog of available tools:
 
 ```bash
 ./infobim run --json
 ```
+
+### 4. File Discovery & Scanning
+Automatically scan and index IFC files located in the `data/incoming` directory. This is the first step to bring your BIM models into the InfoBIM environment.
+
+```bash
+./infobim ifc scan
+```
+
+The system will search for `.ifc` files and display them in the terminal:
+
+![File Search](docs/images/ifc_file_search.png)
+
+Once scanned, the files are ready to be processed by other capabilities:
+
+![File List](docs/images/ifc_file_list.png)
 
 ---
 

@@ -162,10 +162,10 @@ if [[ "$1" == "-h" || "$1" == "--help" ]]; then
     echo -e "    ${CYAN}check [--repair]${RESET}"
     echo -e "      ${GRAY}Verifies the system and project state.${RESET}"
     echo -e "      ${GRAY}Use --repair to attempt automatic fixes.${RESET}"
-    echo ""
-    echo -e "    ${CYAN}init${RESET}"
-    echo -e "      ${GRAY}Initializes a new engineering project (AECO sector).${RESET}"
-    echo -e "      ${GRAY}Sets up the standard folder structure and configuration.${RESET}"
+    # echo ""
+    # echo -e "    ${CYAN}init${RESET}"
+    # echo -e "      ${GRAY}Initializes a new engineering project (AECO sector).${RESET}"
+    # echo -e "      ${GRAY}Sets up the standard folder structure and configuration.${RESET}"
     echo ""
 
     if [ -f "./data/config.yaml" ]; then
@@ -180,16 +180,16 @@ if [[ "$1" == "-h" || "$1" == "--help" ]]; then
     echo -e "    ${CYAN}ifc${RESET}"
     echo -e "      ${GRAY}Tools for visualizing and inspecting IFC files.${RESET}"
     echo ""
-    echo -e "${GRAY}${FULL_HLINE}${RESET}"
-    echo ""
-    echo -e "    ${CYAN}commit [message]${RESET}"
-    echo -e "      ${GRAY}Automates commits across multiple repositories.${RESET}"
-    echo -e "      ${GRAY}Usage: ./infobim commit \"Commit message\"${RESET}"
-    echo ""
-    echo -e "    ${CYAN}branch <action> <branch_name>${RESET}"
-    echo -e "      ${GRAY}Automates branch creation and checkout.${RESET}"
-    echo -e "      ${GRAY}Actions: create, checkout${RESET}"
-    echo ""
+    # echo -e "${GRAY}${FULL_HLINE}${RESET}"
+    # echo ""
+    # echo -e "    ${CYAN}commit [message]${RESET}"
+    # echo -e "      ${GRAY}Automates commits across multiple repositories.${RESET}"
+    # echo -e "      ${GRAY}Usage: ./infobim commit \"Commit message\"${RESET}"
+    # echo ""
+    # echo -e "    ${CYAN}branch <action> <branch_name>${RESET}"
+    # echo -e "      ${GRAY}Automates branch creation and checkout.${RESET}"
+    # echo -e "      ${GRAY}Actions: create, checkout${RESET}"
+    # echo ""
     echo -e "${GRAY}${FULL_HLINE}${RESET}"
     echo ""
     exit 0
@@ -346,15 +346,22 @@ if [ "$1" == "install" ]; then
     fi
 
     if [[ -f "./stack/infobim" ]]; then
-        rm ./stack/infobim
+        if [[ ! -L "./infobim" ]]; then
+            echo -e "${CYAN}Linking infobim...${RESET}"
+            ln -sf ./stack/infobim ./infobim
+        fi
+    fi
 
-    if [[ -f "./stack/ontobdc" ]]; then
-        if [[ -f "./ontobdc" ]]; then
-            echo -e "${CYAN}Removing ontobdc...${RESET}"
-            rm ./stack/ontobdc
+    if [[ -d "./stack/ontobdc" ]]; then
+        if [[ -e "./ontobdc" && ! -L "./ontobdc" ]]; then
+            echo -e "${CYAN}Removing existing ontobdc...${RESET}"
+            rm -rf ./ontobdc
         fi
 
-        mv ./stack/ontobdc ./ontobdc
+        if [[ ! -L "./ontobdc" ]]; then
+            echo -e "${CYAN}Linking ontobdc...${RESET}"
+            ln -sf ./stack/ontobdc ./ontobdc
+        fi
     fi
 
     # 2. Setup Virtual Environment (Default)
@@ -389,9 +396,9 @@ if [[ ! -d "./stack" || ! -f "./stack/init.sh" ]]; then
 fi
 echo ""
 echo -e "  ${WHITE}Available commands:${RESET}"
-echo -e "    ${CYAN}commit${RESET}  ${GRAY}Automates commits across multiple repositories${RESET}"
-echo -e "    ${CYAN}checkout${RESET} ${GRAY}Switch branches across all repositories${RESET}"
-echo -e "    ${CYAN}branch${RESET}  ${GRAY}Automates branch creation and checkout${RESET}"
+# echo -e "    ${CYAN}commit${RESET}  ${GRAY}Automates commits across multiple repositories${RESET}"
+# echo -e "    ${CYAN}checkout${RESET} ${GRAY}Switch branches across all repositories${RESET}"
+# echo -e "    ${CYAN}branch${RESET}  ${GRAY}Automates branch creation and checkout${RESET}"
 if [ -f "./data/config.yaml" ]; then
     echo -e "    ${CYAN}run${RESET}     ${GRAY}Runs the infoBIM application stack${RESET}"
     echo -e "    ${CYAN}proj${RESET}    ${GRAY}Enters directly into project information${RESET}"

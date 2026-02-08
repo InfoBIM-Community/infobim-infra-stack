@@ -115,10 +115,23 @@ if [ "$ANY_CHECK_FAILED" = true ]; then
     exit 1
 fi
 
+# Check if project module is enabled
+PROJ_ENABLED="true"
+if [ -f "stack/infobim-ifc.yaml" ]; then
+    PROJ_ENABLED=$(python3 -c "import yaml; config = yaml.safe_load(open('stack/infobim-ifc.yaml')); print(str(next((m['proj']['enabled'] for m in config.get('modules', []) if 'proj' in m), True)).lower())" 2>/dev/null)
+fi
+
 # Check if ./data exists and ./data/config.yaml exists
-if [[ ! -d "./data" || ! -f "./data/config.yaml" ]]; then
+if [ "$PROJ_ENABLED" == "true" ] && [[ ! -d "./data" || ! -f "./data/config.yaml" ]]; then
     echo ""
     print_message_box "$RED" "Error" "Project not initialized" "Please use ./infobim init to initialize it."
     echo ""
     exit 1
 fi
+
+echo ""
+echo -e "${CYAN}Starting InfoBIM...${RESET}"
+echo ""
+
+export PYTHONPATH=$PYTHONPATH:.
+./venv/bin/python3 ./stack/src/tui/terminal/ifc.py "$@"

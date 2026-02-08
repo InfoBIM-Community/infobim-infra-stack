@@ -16,6 +16,8 @@ check() {
     # Use python to check installed packages
     ./venv/bin/python3 -c "
 import sys
+import warnings
+warnings.filterwarnings('ignore')
 try:
     import pkg_resources
 except ImportError:

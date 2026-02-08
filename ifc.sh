@@ -34,6 +34,10 @@ fi
 
 # Check for repair mode
 REPAIR_MODE=false
+if [[ "$1" == "scan" ]]; then
+    shift
+fi
+
 if [[ "$1" == "--repair" ]]; then
     REPAIR_MODE=true
 fi
@@ -123,6 +127,10 @@ if [ "$CONFIG_MODE" = false ]; then
         exit 1
     fi
 fi
+
+# Scan functionality
+# if [[ "$1" == "scan" ]]; then ... (removed)
+
 
 # Run TUI
 if [ "$CONFIG_MODE" = true ]; then

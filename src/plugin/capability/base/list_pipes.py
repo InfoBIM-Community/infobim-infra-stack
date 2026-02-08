@@ -72,6 +72,9 @@ class ListPipesCliStrategy(CapabilityCliStrategy):
         if not ifc_path or not os.path.exists(ifc_path):
             console.print(f"[yellow]Warning: File not found: {ifc_path}[/yellow]")
             console.print("[dim]Please provide a valid IFC path as argument.[/dim]")
+            console.print("\n[bold]Example:[/bold]")
+            console.print(f"[dim]  ./infobim run {capability.metadata.id} ./data/incoming/examples/sewage_project.ifc[/dim]")
+            console.print("\n")
             return
 
         console.print(f"[bold blue]{self.get_text('running', lang)}[/bold blue] {ifc_path}")
