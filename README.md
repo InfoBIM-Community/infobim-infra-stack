@@ -71,7 +71,7 @@ A **Capability** is the atomic unit of work in InfoBIM. It wraps your Python scr
 | ID | Description |
 |----|-------------|
 | `infobim.capability.list_pipes` | Extracts pipe segments with geometry (Length, Z-coordinates) and properties. |
-| `infobim.capability.list_sewage_pipes` | Specialized extraction for Sewage systems. Calculates **Real Slope** vs **Minimum Slope (NBR 8160)**. |
+| `infobim.capability.list_sewage_pipes` | Specialized extraction for Sewage systems. Calculates **Real Slope** vs **Minimum Slope (Brazilian Standard NBR 8160, so far)**. |
 
 ---
 
@@ -102,6 +102,7 @@ InfoBIM is **Agent-First**.
 This project is part of the **InfoBIM Community**.
 Licensed under **Apache 2.0**.
 
-<div align="center">
-  <b>Proudly developed in Brazil 🇧🇷, so far</b>
+<div align="left">
+  <br />
+  <b>Proudly developed in Brazil 🇧🇷</b>
 </div>
