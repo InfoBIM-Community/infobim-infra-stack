@@ -154,10 +154,11 @@ if [[ "$1" == "-h" || "$1" == "--help" ]]; then
     echo ""
     echo -e "  ${WHITE}COMMANDS${RESET}"
     echo ""
-    echo -e "    ${CYAN}install [--docker]${RESET}"
+    echo -e "    ${CYAN}install [--docker] [--colab]${RESET}"
     echo -e "      ${GRAY}Installs the stack and prepares the environment.${RESET}"
     echo -e "      ${GRAY}Default: Sets up Python virtual environment (venv).${RESET}"
     echo -e "      ${GRAY}--docker: Also sets up Docker environment.${RESET}"
+    echo -e "      ${GRAY}--colab: Optimizes for Google Colab (skips venv, creates env file).${RESET}"
     echo ""
     echo -e "    ${CYAN}check [--repair]${RESET}"
     echo -e "      ${GRAY}Verifies the system and project state.${RESET}"
@@ -364,13 +365,28 @@ if [ "$1" == "install" ]; then
         fi
     fi
 
-    # 2. Setup Virtual Environment (Default)
-    echo ""
-    echo -e "${CYAN}Setting up Python Environment (venv)...${RESET}"
-    bash ./stack/check.sh --repair --scope infra
+    # 2. Check for Colab Mode
+    IS_COLAB=false
+    if [[ "$*" == *"--colab"* ]]; then
+        IS_COLAB=true
+        echo ""
+        echo -e "${CYAN}Configuring for Google Colab...${RESET}"
+        echo "engine: colab" > ./infobim-ifc.env.yaml
+        echo -e "${GREEN}Created infobim-ifc.env.yaml${RESET}"
+    fi
 
-    # 3. Setup Docker (Optional)
-    if [[ "$2" == "--docker" ]]; then
+    # 3. Setup Virtual Environment (Default)
+    if [ "$IS_COLAB" = false ]; then
+        echo ""
+        echo -e "${CYAN}Setting up Python Environment (venv)...${RESET}"
+        bash ./stack/check.sh --repair --scope infra
+    else
+        echo ""
+        echo -e "${YELLOW}Skipping venv setup (Colab mode).${RESET}"
+    fi
+
+    # 4. Setup Docker (Optional)
+    if [[ "$*" == *"--docker"* && "$IS_COLAB" = false ]]; then
         echo ""
         echo -e "${CYAN}Setting up Docker Environment...${RESET}"
         bash ./stack/check.sh --repair --scope ifc
