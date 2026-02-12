@@ -385,6 +385,18 @@ if [ "$1" == "install" ]; then
         echo -e "${CYAN}Configuring for Google Colab...${RESET}"
         echo "engine: colab" > ./infobim-ifc.env.yaml
         echo -e "${GREEN}Created infobim-ifc.env.yaml${RESET}"
+
+        echo -e "${CYAN}Configuring PYTHONPATH...${RESET}"
+        # Create .pth file in site-packages to include the 'stack' directory
+        if python3 -c "import site" > /dev/null 2>&1; then
+             SITE_PKG=$(python3 -c "import site; print([p for p in site.getsitepackages() if 'site-packages' in p or 'dist-packages' in p][0])")
+             if [ -d "$SITE_PKG" ]; then
+                 echo "$(pwd)/stack" > "$SITE_PKG/infobim-stack.pth"
+                 echo -e "${GREEN}Added $(pwd)/stack to $SITE_PKG/infobim-stack.pth${RESET}"
+             else
+                 echo -e "${YELLOW}Could not find site-packages directory. PYTHONPATH might not be persistent.${RESET}"
+             fi
+        fi
     fi
 
     # 3. Setup Virtual Environment (Default)
