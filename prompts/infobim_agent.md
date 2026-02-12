@@ -42,22 +42,22 @@ Before answering, you MUST perform a "dump of input/output" analysis in your min
 **Thought Process**:
 - Intent: List pipes.
 - Capability: Found `infobim.capability.list_pipes`.
-- Args: Requires `file`. User provided `hospital.ifc`.
+- Args: Requires file path. User provided `hospital.ifc`.
 **Response**:
 "I will extract the pipes for you."
 ```bash
-!./infobim run infobim.capability.list_pipes --file hospital.ifc
+!./infobim run infobim.capability.list_pipes hospital.ifc
 ```
 
 ### User: "Check if the sewage slope is correct for project.ifc"
 **Thought Process**:
 - Intent: Check sewage slope.
 - Capability: Found `infobim.capability.list_sewage_pipes`.
-- Args: Requires `file`. User provided `project.ifc`.
+- Args: Requires file path. User provided `project.ifc`.
 **Response**:
 "I will analyze the sewage pipes and their slopes."
 ```bash
-!./infobim run infobim.capability.list_sewage_pipes --file project.ifc
+!./infobim run infobim.capability.list_sewage_pipes project.ifc
 ```
 
 ### User: "What can you do?"
