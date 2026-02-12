@@ -38,8 +38,14 @@ chmod +x infobim
 # 3. Install environment (downloads the stack & setups venv)
 ./infobim install
 
-# Optional: Install with Docker support
+# Option A: Install with Docker support
 # ./infobim install --docker
+
+# Option B: Google Colab Mode (Optimized for Notebooks)
+# - Skips virtualenv creation (uses system Python)
+# - Creates 'infobim-ifc.env.yaml' with engine: colab
+# - Merges configs automatically (Base -> Env -> User)
+# ./infobim install --colab
 ```
 
 ### 2. Run a Capability
@@ -74,6 +80,21 @@ Once scanned, the files are ready to be processed by other capabilities:
 
 ![File List](docs/images/ifc_file_list.png)
 
+### 5. System Health & Maintenance
+InfoBIM includes self-diagnostic tools to ensure your environment is correctly configured.
+
+**Run System Check:**
+Verifies if all dependencies (Python, Git, Venv, Docker) and project structures are in place.
+```bash
+./infobim check
+```
+
+**Auto-Repair:**
+If a check fails, you can try the repair mode, which attempts to fix common issues automatically (e.g., recreating venv, installing missing requirements).
+```bash
+./infobim check --repair
+```
+
 ---
 
 ## 🧩 Capabilities
@@ -88,7 +109,7 @@ A **Capability** is the atomic unit of work in InfoBIM. It wraps your Python scr
 | ID | Description |
 |----|-------------|
 | `infobim.capability.list_pipes` | Extracts pipe segments with geometry (Length, Z-coordinates) and properties. |
-| `infobim.capability.list_sewage_pipes` | Specialized extraction for Sewage systems. Calculates **Real Slope** vs **Minimum Slope (Brazilian Standard NBR 8160, so far)**. |
+| `infobim.capability.list_sewage_pipes` | Specialized extraction for Sewage systems. Calculates **Real Slope** vs **Minimum Slope (NBR 8160)**. |
 
 ---
 
@@ -119,7 +140,6 @@ InfoBIM is **Agent-First**.
 This project is part of the **InfoBIM Community**.
 Licensed under **Apache 2.0**.
 
-<div align="left">
-  <br />
-  <b>Proudly developed in Brazil 🇧🇷</b>
+<div align="center">
+  <b>Proudly developed in Brazil 🇧🇷, so far</b>
 </div>
