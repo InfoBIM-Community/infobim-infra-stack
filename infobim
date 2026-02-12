@@ -417,6 +417,10 @@ if [ "$1" == "install" ]; then
     fi
 
     echo ""
+    echo -e "${CYAN}Verifying System Health...${RESET}"
+    bash ./infobim check --repair
+
+    echo ""
     print_message_box "$GREEN" "Success!" "Installation finished" "Environment is ready."
     echo ""
 
