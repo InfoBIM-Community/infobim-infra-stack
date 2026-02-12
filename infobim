@@ -257,13 +257,25 @@ if [ "$1" == "run" ]; then
             exit 1
         fi
         shift # remove 'run'
-        if [[ ! -f "./venv/bin/python3" ]]; then
+
+        # Check for Colab environment
+        IS_COLAB=false
+        if [[ -f "infobim-ifc.env.yaml" ]] && grep -q "engine: colab" "infobim-ifc.env.yaml"; then
+            IS_COLAB=true
+        fi
+
+        PYTHON_CMD="./venv/bin/python3"
+        if [ "$IS_COLAB" = true ]; then
+            PYTHON_CMD="python3"
+        fi
+
+        if [ "$IS_COLAB" = false ] && [[ ! -f "$PYTHON_CMD" ]]; then
             echo ""
             print_message_box "$RED" "Error" "Environment Error" "Virtual environment not found.\nPlease run './infobim install' to set up the environment."
             echo ""
             exit 1
         fi
-        ./venv/bin/python3 ./stack/run.py "$@"
+        $PYTHON_CMD ./stack/run.py "$@"
         exit $?
     fi
 
