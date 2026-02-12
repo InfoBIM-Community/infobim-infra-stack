@@ -348,7 +348,7 @@ if [ "$1" == "install" ]; then
         fi
 
         echo -e "${CYAN}Installing stack submodule...${RESET}"
-        git submodule add -f git@github.com:InfoBIM-Community/infobim-ifc.git stack
+        git submodule add -f https://github.com/InfoBIM-Community/infobim-ifc.git stack
         
         if [ $? -ne 0 ]; then
              print_message_box "$RED" "Error" "Installation failed" "Failed to install stack!"
