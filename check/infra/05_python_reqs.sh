@@ -3,8 +3,14 @@ DESCRIPTION="Infra: Python Requirements"
 REQ_FILE="$(dirname "${BASH_SOURCE[0]}")/requirements.txt"
 
 check() {
-    # If venv doesn't exist, we can't check
-    if [[ ! -f "venv/bin/python3" ]]; then
+    # Check for Colab environment
+    IS_COLAB=false
+    if [[ -f "infobim-ifc.env.yaml" ]] && grep -q "engine: colab" "infobim-ifc.env.yaml"; then
+        IS_COLAB=true
+    fi
+
+    # If venv doesn't exist and not in Colab, we can't check
+    if [ "$IS_COLAB" = false ] && [[ ! -f "venv/bin/python3" ]]; then
         return 1
     fi
     
@@ -13,8 +19,13 @@ check() {
         return 1
     fi
 
+    PYTHON_CMD="./venv/bin/python3"
+    if [ "$IS_COLAB" = true ]; then
+        PYTHON_CMD="python3"
+    fi
+
     # Use python to check installed packages
-    ./venv/bin/python3 -c "
+    $PYTHON_CMD -c "
 import sys
 import warnings
 warnings.filterwarnings('ignore')
@@ -37,11 +48,22 @@ except Exception:
 }
 
 hotfix() {
-    if [[ ! -f "venv/bin/python3" ]]; then
+    # Check for Colab environment
+    IS_COLAB=false
+    if [[ -f "infobim-ifc.env.yaml" ]] && grep -q "engine: colab" "infobim-ifc.env.yaml"; then
+        IS_COLAB=true
+    fi
+
+    if [ "$IS_COLAB" = false ] && [[ ! -f "venv/bin/python3" ]]; then
         echo "Virtual environment not found."
         return 1
     fi
     
     echo "Installing requirements..."
-    ./venv/bin/python3 -m pip install -r "$REQ_FILE"
+    PYTHON_CMD="./venv/bin/python3"
+    if [ "$IS_COLAB" = true ]; then
+        PYTHON_CMD="python3"
+    fi
+
+    $PYTHON_CMD -m pip install -r "$REQ_FILE"
 }
