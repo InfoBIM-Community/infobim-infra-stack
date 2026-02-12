@@ -23,13 +23,26 @@ FULL_HLINE=$(printf '─%.0s' $(seq 1 $TERM_WIDTH))
 # Source message box utility
 source "$(dirname "$0")/message_box.sh"
 
-# Activate venv
-if [[ -f "venv/bin/activate" ]]; then
-    source venv/bin/activate
+# Check for Colab environment
+IS_COLAB=false
+if [[ -f "infobim-ifc.env.yaml" ]] && grep -q "engine: colab" "infobim-ifc.env.yaml"; then
+    IS_COLAB=true
+fi
+
+# Activate venv if not in Colab
+if [ "$IS_COLAB" = false ]; then
+    if [[ -f "venv/bin/activate" ]]; then
+        source venv/bin/activate
+    else
+        echo -e "${RED}Virtual environment not found in venv/${RESET}"
+        echo -e "${YELLOW}Please run './infobim check --repair' to setup the environment.${RESET}"
+        exit 1
+    fi
 else
-    echo -e "${RED}Virtual environment not found in venv/${RESET}"
-    echo -e "${YELLOW}Please run './infobim check --repair' to setup the environment.${RESET}"
-    exit 1
+    # Define no-op deactivate for Colab mode
+    deactivate() {
+        :
+    }
 fi
 
 # Check for repair mode
