@@ -8,12 +8,13 @@ import subprocess
 import importlib.util
 from rich.console import Console
 from stack.src.tui.util.translation import get_translated_message
-from ontobdc.src.aeco.core.port.ifc.repository import IfcFileRepositoryPort
-from ontobdc.src.aeco.adapter.ifc.hierarchy.adapter import IfcFileTreeAdapter
-from ontobdc.src.aeco.adapter.ifc.repository.local import LocalIfcFileRepositoryAdapter
-from ontobdc.src.aeco.adapter.ifc.repository.docker import DockerIfcFileRepositoryAdapter
+from ontobdc.tmp.aeco.core.port.ifc.repository import IfcFileRepositoryPort
+from ontobdc.tmp.aeco.adapter.ifc.hierarchy.adapter import IfcFileTreeAdapter
+from ontobdc.tmp.aeco.adapter.ifc.repository.local import LocalIfcFileRepositoryAdapter
+from ontobdc.tmp.aeco.adapter.ifc.repository.docker import DockerIfcFileRepositoryAdapter
 from stack.src.tui.util.path import get_message_box_script, get_config_path, load_config
 from stack.src.tui.core.port.ui.screen import TerminalScreenPort, TerminalScreenSpinnerPort, TerminalScreenTreeContentPort
+from stack.src.tui.util.selector import FileSelector, SimpleMenuSelector, Keyboard
 
 
 def load_adapter_module(config):
@@ -189,8 +190,87 @@ def main() -> None:
         tree_adapter = IfcFileTreeAdapter(repo_adapter)
 
     if TerminalScreenTreeContentClass:
-        tree_content = TerminalScreenTreeContentClass(tree_adapter)
-        console.render(tree=tree_content.render())
+        # Try interactive selection first
+        files = []
+        if hasattr(tree_adapter, 'get_files'):
+            files = tree_adapter.get_files()
+        elif hasattr(repo_adapter, 'list_files'):
+            files = repo_adapter.list_files()
+            
+        if files:
+            selector = FileSelector()
+            menu_selector = SimpleMenuSelector()
+            # Clear screen before showing menu? FileSelector uses screen=True so it handles it.
+            
+            while True:
+                selected_file = selector.select_file(files, title="Select an IFC File")
+                
+                if selected_file:
+                    # Show action menu for selected file
+                    options = [
+                        {"label": "List Pipes", "value": "infobim.capability.list_pipes"},
+                        {"label": "List Sewage Pipes", "value": "org.infobim.base.capability.list_sewage_pipes"}
+                    ]
+                    
+                    while True:
+                        action = menu_selector.select_option(
+                            options, 
+                            title=f"Action for {os.path.basename(selected_file)}"
+                        )
+                        
+                        if action:
+                            # Execute the selected capability using the infobim wrapper script
+                            # This ensures correct environment setup and path handling
+                            # Path to project root (4 levels up from stack/src/tui/terminal/ifc.py)
+                            current_dir = os.path.dirname(os.path.abspath(__file__))
+                            project_root = os.path.abspath(os.path.join(current_dir, "../../../../"))
+                            infobim_script = os.path.join(project_root, "infobim")
+                            
+                            # Ensure selected_file is absolute
+                            # If it comes from repo adapter, it might be relative to repo base
+                            # But FileSelector returns whatever value is put in.
+                            # The repo adapter list_files returns relative paths usually?
+                            # Let's check if we can resolve it against repo base if needed.
+                            # repo_adapter.base_path is available.
+                            
+                            abs_file_path = selected_file
+                            if not os.path.isabs(selected_file):
+                                # Try to resolve against current dir first (if user ran from there)
+                                # Or repo base path
+                                if hasattr(repo_adapter, 'base_path'):
+                                    abs_file_path = os.path.join(repo_adapter.base_path, selected_file)
+                                else:
+                                    abs_file_path = os.path.abspath(selected_file)
+                            
+                            # Build command: ./infobim run <capability_id> <ifc_path>
+                            cmd = ["bash", infobim_script, "run", action, abs_file_path]
+                            
+                            # Clear screen manually
+                            console.clear()
+                            
+                            try:
+                                # We use subprocess.run to let the capability take over the terminal
+                                subprocess.run(cmd, check=False)
+                            except Exception as e:
+                                console.print(f"[red]Error executing capability: {e}[/red]")
+                            
+                            # Wait for user input to continue, so they can see the output
+                            console_rich = Console()
+                            console_rich.print("\n[dim]Press any key to return...[/dim]")
+                            
+                            keyboard = Keyboard()
+                            keyboard() # Wait for keypress
+                        else:
+                            # ESC pressed in action menu -> Back to file selection
+                            break
+                else:
+                    # ESC pressed in menu -> Exit app
+                    console.render(content="[yellow]Selection cancelled.[/yellow]")
+                    break
+        else:
+            # Fallback to static tree if no files found (or empty list)
+            tree_content = TerminalScreenTreeContentClass(tree_adapter)
+            console.render(tree=tree_content.render())
     else:
         # Fallback if adapter not found
         console.render(tree=tree_adapter.build_tree())

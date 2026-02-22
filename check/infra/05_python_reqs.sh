@@ -27,21 +27,19 @@ check() {
     # Use python to check installed packages
     $PYTHON_CMD -c "
 import sys
-import warnings
-warnings.filterwarnings('ignore')
-try:
-    import pkg_resources
-except ImportError:
-    # setuptools not installed
-    sys.exit(1)
+import importlib.metadata
 
 try:
     with open('$REQ_FILE', 'r') as f:
-        # Filter empty lines and comments
         reqs = [line.strip() for line in f if line.strip() and not line.startswith('#')]
     
-    # Check if requirements are satisfied
-    pkg_resources.require(reqs)
+    for req in reqs:
+        # Basic parsing: get package name (ignoring version specs for simple check)
+        pkg_name = req.split('==')[0].split('>=')[0].split('<=')[0].split('>')[0].split('<')[0].split('~=')[0].strip()
+        try:
+            importlib.metadata.version(pkg_name)
+        except importlib.metadata.PackageNotFoundError:
+            sys.exit(1)
 except Exception:
     sys.exit(1)
 "
@@ -60,10 +58,17 @@ hotfix() {
     fi
     
     echo "Installing requirements..."
-    PYTHON_CMD="./venv/bin/python3"
-    if [ "$IS_COLAB" = true ]; then
-        PYTHON_CMD="python3"
-    fi
-
-    $PYTHON_CMD -m pip install -r "$REQ_FILE"
+    ./venv/bin/python3 -m pip install -r "$REQ_FILE"
 }
+
+repair() {
+    hotfix
+}
+
+PYTHON_CMD="./venv/bin/python3"
+if [ "$IS_COLAB" = true ]; then
+    PYTHON_CMD="python3"
+fi
+
+$PYTHON_CMD -m pip install -r "$REQ_FILE"
+

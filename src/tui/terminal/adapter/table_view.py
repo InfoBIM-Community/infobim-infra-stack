@@ -2,16 +2,6 @@ from typing import List, Tuple, Optional, Any
 from rich.table import Table
 from rich.box import Box
 
-# Custom box with dashed separator lines
-# Defines characters to render boxes.
-# ┌─┬┐ top
-# │ ││ head
-# ├─┼┤ head_row
-# │ ││ mid
-# ├─┼┤ row
-# ├─┼┤ foot_row
-# │ ││ foot
-# └─┴┘ bottom
 DASHED_HORIZONTALS = Box(
     " ── \n"
     "    \n"
@@ -23,33 +13,21 @@ DASHED_HORIZONTALS = Box(
     " ── \n"
 )
 
+
 class TableViewAdapter:
-    """
-    Adapter for creating standardized Rich Tables with consistent styling.
-    """
+    PRIMARY_COLUMN = {"style": "cyan", "vertical": "top"}
+    NUMERIC_COLUMN = {"justify": "right", "vertical": "top"}
+    SECONDARY_COLUMN = {"style": "dim", "vertical": "top"}
+    INDEX_COLUMN = {"justify": "right", "style": "dim", "vertical": "top"}
 
     @staticmethod
     def create_table(
         title: str,
-        columns: List[Tuple[str, Any]],  # List of (name, style_options_dict or kwargs)
+        columns: List[Tuple[str, Any]],
         show_header: bool = True,
         header_style: str = "bold white",
         border_style: str = "grey35"
     ) -> Table:
-        """
-        Creates a Rich Table with the project's standard styling (dashed lines, grey borders).
-
-        Args:
-            title (str): Table title.
-            columns (List[Tuple[str, dict]]): List of columns to add. 
-                Each item is a tuple: (Header Name, {style="...", justify="...", ...})
-            show_header (bool): Whether to show the header. Defaults to True.
-            header_style (str): Style for the header. Defaults to "bold white".
-            border_style (str): Style for the border. Defaults to "grey35".
-
-        Returns:
-            Table: Configured Rich Table object.
-        """
         table = Table(
             title=title,
             box=DASHED_HORIZONTALS,
@@ -63,3 +41,15 @@ class TableViewAdapter:
             table.add_column(col_name, **col_kwargs)
 
         return table
+
+    @staticmethod
+    def col(label: str, kind: str = "primary", **overrides: Any) -> Tuple[str, Any]:
+        kind_map = {
+            "primary": TableViewAdapter.PRIMARY_COLUMN,
+            "numeric": TableViewAdapter.NUMERIC_COLUMN,
+            "secondary": TableViewAdapter.SECONDARY_COLUMN,
+            "index": TableViewAdapter.INDEX_COLUMN,
+        }
+        base = dict(kind_map.get(kind, {}))
+        base.update(overrides)
+        return label, base

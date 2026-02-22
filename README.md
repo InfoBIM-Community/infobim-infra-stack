@@ -53,7 +53,7 @@ Execute a specific task directly without opening the full UI:
 
 ```bash
 # List all sewage pipes (validating against NBR 8160)
-./infobim run infobim.capability.list_sewage_pipes --ifc_path ./data/my_project.ifc
+./infobim run org.infobim.base.capability.list_sewage_pipes --ifc_path ./data/my_project.ifc
 ```
 
 ![Report Example](docs/images/report.png)
@@ -109,7 +109,7 @@ A **Capability** is the atomic unit of work in InfoBIM. It wraps your Python scr
 | ID | Description |
 |----|-------------|
 | `infobim.capability.list_pipes` | Extracts pipe segments with geometry (Length, Z-coordinates) and properties. |
-| `infobim.capability.list_sewage_pipes` | Specialized extraction for Sewage systems. Calculates **Real Slope** vs **Minimum Slope (NBR 8160)**. |
+| `org.infobim.base.capability.list_sewage_pipes` | Specialized extraction for Sewage systems. Calculates **Real Slope** vs **Minimum Slope (NBR 8160)**. |
 
 ---
 
