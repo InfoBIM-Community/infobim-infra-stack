@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "infobim"
-authors = [{ name="Elias M P Junior" }]
+authors = [{ name="@eliasmpj" }]
 version = "0.1.0"
 description = "InfoBIM"
 readme = "README.md"
@@ -26,8 +26,12 @@ package-dir = {"" = "src"}
     "check/*.sh",
     "check/*.json",
     "check/infra/*/*.sh",
+    "module/**",
+    "run/*.sh",
+    "cli.py",
 ]
 
 [tool.setuptools.packages.find]
 where = ["src"]
 include = ["infobim*"]
+
