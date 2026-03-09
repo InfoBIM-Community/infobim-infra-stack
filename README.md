@@ -29,23 +29,14 @@ Whether you are a human running commands in the terminal or an **AI Agent** plan
 
 ### 1. Install
 ```bash
-# 1. Download the CLI
-wget https://raw.githubusercontent.com/InfoBIM-Community/infobim-ifc/master/infobim
+# 1. Install via pip
+pip install infobim
 
-# 2. Make it executable
-chmod +x infobim
+# 2. Verify installation
+infobim --help
 
-# 3. Install environment (downloads the stack & setups venv)
-./infobim install
-
-# Option A: Install with Docker support
-# ./infobim install --docker
-
-# Option B: Google Colab Mode (Optimized for Notebooks)
-# - Skips virtualenv creation (uses system Python)
-# - Creates 'infobim-ifc.env.yaml' with engine: colab
-# - Merges configs automatically (Base -> Env -> User)
-# ./infobim install --colab
+# 3. (Optional) Run a command
+infobim run --ifc-path ./data/model.ifc --global-id 1VB9G8xuL3MArqCPoqhS3L
 ```
 
 ### 2. Run a Capability
@@ -53,7 +44,7 @@ Execute a specific task directly without opening the full UI:
 
 ```bash
 # List all sewage pipes (validating against NBR 8160)
-./infobim run infobim.capability.list_sewage_pipes --ifc_path ./data/my_project.ifc
+infobim run --id org.infobim.domain.ifc.capability.inspect_element --ifc-path ./data/model.ifc --global-id 1VB9G8xuL3MArqCPoqhS3L
 ```
 
 ![Report Example](docs/images/report.png)
@@ -62,7 +53,7 @@ Execute a specific task directly without opening the full UI:
 Are you an LLM or building an Agent? Get the full machine-readable catalog of available tools:
 
 ```bash
-./infobim run --json
+infobim run --json
 ```
 
 ### 4. File Discovery & Scanning
@@ -86,13 +77,13 @@ InfoBIM includes self-diagnostic tools to ensure your environment is correctly c
 **Run System Check:**
 Verifies if all dependencies (Python, Git, Venv, Docker) and project structures are in place.
 ```bash
-./infobim check
+infobim check
 ```
 
 **Auto-Repair:**
 If a check fails, you can try the repair mode, which attempts to fix common issues automatically (e.g., recreating venv, installing missing requirements).
 ```bash
-./infobim check --repair
+infobim check --repair
 ```
 
 ---
@@ -108,21 +99,22 @@ A **Capability** is the atomic unit of work in InfoBIM. It wraps your Python scr
 
 | ID | Description |
 |----|-------------|
-| `infobim.capability.list_pipes` | Extracts pipe segments with geometry (Length, Z-coordinates) and properties. |
-| `infobim.capability.list_sewage_pipes` | Specialized extraction for Sewage systems. Calculates **Real Slope** vs **Minimum Slope (NBR 8160)**. |
+| `org.infobim.domain.ifc.capability.list_elements` | Lists IFC elements with basic properties (GlobalId, Name, Type). |
+| `org.infobim.domain.ifc.capability.list_property_sets` | Lists all Property Sets and properties for a specific element. |
+| `org.infobim.domain.ifc.capability.list_buildings` | Lists Buildings and their Storeys with elevations. |
+| `org.infobim.domain.ifc.capability.inspect_element` | Detailed inspection of an element, including attributes, hierarchy and property sets. |
 
 ---
 
 ## 🏗️ Architecture
 
-InfoBIM IFC is designed to be the "Operating System" for your BIM scripts.
+InfoBIM is a modular CLI framework for BIM data processing.
 
-*   **Runtime**: Handles the environment (Python, Docker, IFCOpenShell).
-*   **Registry**: Discovers and registers available Capabilities.
+*   **Core**: Provides the execution runtime and capability management.
+*   **Modules**: Extend functionality (e.g., IFC processing, validation).
 *   **Interfaces**:
-    *   **CLI**: Direct execution (`./infobim run ...`).
-    *   **TUI**: Interactive Text User Interface (`./infobim run`).
-    *   **JSON-RPC**: (Coming soon) for remote execution.
+    *   **CLI**: Direct execution (`infobim run ...`).
+    *   **JSON Output**: Machine-readable output for integration with other tools/agents.
 
 ---
 
