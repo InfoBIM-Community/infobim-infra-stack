@@ -4,7 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "infobim"
-authors = [{ name="@eliasmpj" }]
+authors = [
+    { name = "Elias Magalhães", email = "seu-email@dominio.com" }
+]
 version = "0.1.0"
 description = "InfoBIM"
 readme = "README.md"
